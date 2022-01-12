@@ -3,6 +3,13 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
+//在全局引入TypeNav组件
+import TypeNav from './components/TypeNav'
+
+Vue.component('TypeNav',TypeNav)
+//引入mock模块
+import '@/mock/mockServer.js';
+
 Vue.config.productionTip = false
 
 new Vue({
