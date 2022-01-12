@@ -26,8 +26,7 @@
           <div class="swiper-pagination"></div>
 
           <!-- 如果需要导航按钮 -->
-          <div class="swiper-button-prev swiper-button-pink">
-          </div>
+          <div class="swiper-button-prev swiper-button-pink"></div>
           <div class="swiper-button-next swiper-button-pink"></div>
         </div>
       </div>
@@ -121,31 +120,60 @@
         },
       }),
     },
+    //监听bannerList数据发生改变：接收到数据就执行 方法
+    watch: {
+      //监听getBannerList这是在我写的计算函数里
+      getBannerList: {
+        handler(newValue, oldValue) {
+          //就算拿到了bannerList数据，渲染swiper也无数据，v-for还没执行，dom结构依然没有
+          this.$nextTick(() => {
+            //$nextTick(callback fun)则是在下次dom更新循环（for）延迟回调，在修改数据之后执行，获取更新后的dom
+            //简单点记 就是下次dom更新之后执行
+            var mySwiper = new Swiper("#mySwiper", {
+              direction: "horizontal", // shuiping切换选项
+              loop: true, // 循环模式选项
+              autoplay: true, //自动切换
+
+              // 如果需要分页器
+              pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+              },
+
+              // 如果需要前进后退按钮
+              navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+              },
+            });
+          });
+        },
+      },
+    },
     mounted() {
       this.$store.dispatch("getBannerList");
     },
     //虚拟dom更新后执行
-    updated() {
-      var mySwiper = new Swiper("#mySwiper", {
-        direction: "horizontal", // shuiping切换选项
-        loop: true, // 循环模式选项
-         autoplay:true,//自动切换
+    // updated() {
+    //   var mySwiper = new Swiper("#mySwiper", {
+    //     direction: "horizontal", // shuiping切换选项
+    //     loop: true, // 循环模式选项
+    //      autoplay:true,//自动切换
 
+    //     // 如果需要分页器
+    //     pagination: {
+    //       el: ".swiper-pagination",
+    //       clickable :true,
+    //     },
 
-        // 如果需要分页器
-        pagination: {
-          el: ".swiper-pagination",
-          clickable :true,
-        },
+    //     // 如果需要前进后退按钮
+    //     navigation: {
+    //       nextEl: ".swiper-button-next",
+    //       prevEl: ".swiper-button-prev",
+    //     },
 
-        // 如果需要前进后退按钮
-        navigation: {
-          nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev",
-        },
-
-      });
-    },
+    //   });
+    // },
   };
 </script>
 

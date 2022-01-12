@@ -41,7 +41,7 @@ const routes = [
     }
   },
   {
-    path:'/search/:keyWords/?categoryName',
+    path:'/search:keyWords',
     component:Search,
     meta:{
       isShow:true
