@@ -10,24 +10,23 @@
     <!-- 猜你喜欢 -->
     <Like />
     <!--楼层-->
-    <Floor />
-    <!--楼层-->
-    <Floor />
+    <Floor v-for="(floorItem,index) in getFloorList" :key="floorItem.id" :floorList='floorItem'></Floor>
     <!--商标-->
     <Brand />
     <TodayRecommend />
   </div>
 </template>
- 
+
 <script>
-  import Brand from './Brand/Brand'
-  import Floor from './Floor/Floor'
-  import Like from './Like/Like'
-  import ListContainer from './ListContainer/ListContainer'
-  import Rank from './Rank/Rank'
-  import TodayRecommend from './TodayRecommend/TodayRecommend'
+  import Brand from "./Brand/Brand";
+  import Floor from "./Floor/Floor";
+  import Like from "./Like/Like";
+  import ListContainer from "./ListContainer/ListContainer";
+  import Rank from "./Rank/Rank";
+  import TodayRecommend from "./TodayRecommend/TodayRecommend";
+  import {mapState} from 'vuex'
   export default {
-    name: 'Home',
+    name: "Home",
     components: {
       Brand,
       Floor,
@@ -35,10 +34,23 @@
       ListContainer,
       Rank,
       TodayRecommend,
-    }
-  }
+    },
+    data() {
+      return {};
+    },
+    computed:{
+      ...mapState({
+      getFloorList(state){
+        return state.home.floorList.data
+      }
+      })
+
+    },
+    mounted() {
+      this.$store.dispatch("getFloorList");
+      // this.$store.dispatch("getCategoryList");
+    },
+  };
 </script>
- 
-<style lang="less" scoped>
- 
-</style>
+
+<style lang="less" scoped></style>
