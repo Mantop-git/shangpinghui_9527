@@ -64,6 +64,11 @@
     computed:{
       ...mapState(['count'])
     },
+    created() {
+      this.$bus.$on('cleanHeaderKeywords',()=>{
+        this.keyWords=''
+      })
+    },
     methods: {
       searchClick() {
         //最简单的传参数
@@ -75,7 +80,7 @@
           name: "Search",
           params: {
             name:'Search',
-            keyWords: this.keyWords,
+            keyword: this.keyWords,
           },
           // query: {
           //   categoryName: this.keyWords

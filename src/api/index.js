@@ -24,3 +24,12 @@ export const reqGetFloorList = () => {
         method: 'get'
     })
 }
+
+//search模块 获取搜索模块数据
+export const reqGetSearchInfo=(params)=>{
+    return request({
+        url:'/list',
+        method:'post',
+        data:params
+    })
+}

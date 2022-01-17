@@ -1,12 +1,14 @@
 <template>
   <div>
-    <div class="swiper-container" ref="cur" id="floor1Swiper">
+    <div
+      class="swiper-container"
+      @mouseenter="showBtn = true"
+      @mouseleave="showBtn = false"
+      ref="cur"
+      id="floor1Swiper"
+    >
       <div class="swiper-wrapper">
-        <div
-          class="swiper-slide"
-          v-for="carousel in list"
-          :key="carousel.id"
-        >
+        <div class="swiper-slide" v-for="carousel in list" :key="carousel.id">
           <img :src="carousel.imgUrl" />
         </div>
       </div>
@@ -14,8 +16,8 @@
       <div class="swiper-pagination"></div>
 
       <!-- 如果需要导航按钮 -->
-      <div class="swiper-button-prev"></div>
-      <div class="swiper-button-next"></div>
+      <div class="swiper-button-prev swiper-button-pink" v-show="showBtn"></div>
+      <div class="swiper-button-next swiper-button-pink" v-show="showBtn"></div>
     </div>
   </div>
 </template>
@@ -25,7 +27,17 @@
   import "swiper/css/swiper.css";
   export default {
     name: "Carousel",
-    props:['list'],
+
+    data() {
+      return {
+        showBtn: false,
+      };
+    },
+    mounted() {
+      // this.showBtn=false
+    },
+    methods: {},
+    props: ["list"],
     watch: {
       list: {
         //无论监听是否触发，我都先触发一次

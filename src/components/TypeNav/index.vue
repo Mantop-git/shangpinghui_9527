@@ -2,8 +2,8 @@
   <!-- 商品分类导航 -->
   <div class="type-nav">
     <!-- <h1>{{categoryListCop}}</h1> -->
-    <div class="container" >
-      <h2 class="all"  @mouseenter="isShowCate">全部商品分类</h2>
+    <div class="container">
+      <h2 class="all" @mouseenter="isShowCate" @mouseleave="isShowLeave">全部商品分类</h2>
       <nav class="nav">
         <a href="###">服装城</a>
         <a href="###">美妆馆</a>
@@ -27,11 +27,11 @@
               :class="index == currentIndex ? 'backColor' : ''"
               @mouseleave="leaveIndex"
               :data-categoryname="item1.categoryName"
-              :data-category1id="item1.categoryId"
+              :data-category1Id="item1.categoryId"
             >
               <a
                 :data-categoryname="item1.categoryName"
-                :data-category1id="item1.categoryId"
+                :data-category1Id="item1.categoryId"
                 >{{ item1.categoryName }}</a
               >
             </h3>
@@ -45,7 +45,7 @@
                   <dt>
                     <a
                       :data-categoryname="item2.categoryName"
-                      :data-category2id="item2.categoryId"
+                      :data-category2Id="item2.categoryId"
                       >{{ item2.categoryName }}</a
                     >
                   </dt>
@@ -54,9 +54,9 @@
                       v-for="(item3, index3) in item2.categoryChild"
                       :key="item3.categoryId"
                     >
-                      <a
-                        :data-categoryname="item1.categoryName"
-                        :data-category3id="item3.categoryId"
+                      <a style="cursor:pointer;"
+                        :data-categoryname="item3.categoryName"
+                        :data-category3Id="item3.categoryId"
                         >{{ item3.categoryName }}</a
                       >
                     </em>
@@ -80,13 +80,12 @@
     data() {
       return {
         currentIndex: -1,
-        isShow:true
+        isShow: true,
       };
     },
     mounted() {
-
-      if(this.$route.path!=='/home'){
-        this.isShow=false
+      if (this.$route.path !== "/home") {
+        this.isShow = false;
       }
     },
     computed: {
@@ -102,44 +101,47 @@
       getCurrentIndex: throttle(function (index) {
         // console.log(index, "indasdsa"); 看有没有实现节流
         this.currentIndex = index;
-          this.isShow=true
+        this.isShow = true;
       }, 50),
 
       leaveIndex() {
         this.currentIndex = -1;
-
       },
-      isShowCate(){
-        this.isShow=true
+      isShowCate() {
+        this.isShow = true;
       },
-      isShowLeave(){
-        if(this.$route.path!=='/home'){
-          this.isShow=false
+      isShowLeave() {
+        if (this.$route.path !== "/home") {
+          this.isShow = false;
         }
       },
 
       //点击跳转到search组件
-      toSearch(event) {
+      toSearch(event) { 
+        /*这个函数写到最外立面是关键，这样里面的元素都能接受监听，
+        而给了data-属性 的元素点击后就能拿到值传给后台。如果是我写：给那三级一人一个函数，分别拿到对应的id*/
+      console.log('点击这个大区域都会触发点击事件');
         let targetDataset = event.target;
-
+        console.log(targetDataset);
         let {
           categoryname,
-          category0id,
-          category1id,
-          category2id,
-          category3id,
+          category1Id,
+          category2Id,
+          category3Id,
         } = targetDataset.dataset;
-        console.log(category0id, category1id);
+        console.log(category1Id);
         //典型的通过data-自定义属性来获取路由传参，在微信小程序也应用广泛
+        
         if (categoryname) {
           let path = { name: "Search" };
           let query = { categoryName: categoryname };
-          if (category1id ) {
-            query.category1id = category1id;
-          } else if (category2id) {
-            query.category2id = category2id;
+
+          if (category1Id) {
+            query.category1Id = category1Id;
+          } else if (category2Id) {
+            query.category2Id = category2Id;
           } else {
-            query.category3id = category3id;
+            query.category3Id = category3Id;
           }
           console.log(path, query);
           path.query = query;
@@ -201,7 +203,7 @@
           overflow: auto;
 
           .backColor {
-            background: rgb(219, 119, 135);
+            background: #f4c3c5;
             border-radius: 5px;
           }
           .item {

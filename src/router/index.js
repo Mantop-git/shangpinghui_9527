@@ -7,7 +7,7 @@ import Home from '@/pages/Home'
 import Login from '@/pages/Login'
 // import search from '@/pages/search'
 import Register from '@/pages/Register'
-import Search from '@/pages/search'
+import Search from '@/pages/Search'
 const routes = [
   {
     path: '*',
@@ -41,12 +41,13 @@ const routes = [
     }
   },
   {
-    path:'/search:keyWords',
-    component:Search,
-    meta:{
-      isShow:true
+    name: 'Search',
+    path: '/search/:keyword?',
+    component: Search,
+    meta: {
+      isShow: true
     },
-    name:'Search'
+
   }
 
 ]
