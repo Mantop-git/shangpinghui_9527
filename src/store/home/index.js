@@ -1,5 +1,5 @@
 //home组件的小仓库
-import { reqCategoryList, reqGetBannerList, reqGetFloorList } from '@/api'
+    import { reqCategoryList, reqGetBannerList, reqGetFloorList } from '@/api'
 
 
 const state = {

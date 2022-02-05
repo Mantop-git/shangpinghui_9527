@@ -33,3 +33,42 @@ export const reqGetSearchInfo=(params)=>{
         data:params
     })
 }
+
+//商品详情信息接口（放大）
+export const reqGoodsInfo=(skuId)=>{
+    return request({
+        url:`/item/${skuId}`,
+        method:'get'
+    })
+}
+
+//购物车商品数量和信息
+export const reqAddOrUpdateShopCart = (skuId, skuNum)=>{
+    return request({
+        url: `/cart/addToCart/${skuId}/${skuNum}`,
+        method:'post'
+    })
+}
+
+//购物车列表数据
+export const reqCartList=()=>{
+    return request({
+        url:'/cart/cartList',
+        method:'get'
+    })
+}
+//购物车数据数量修改
+export const reqChangeGoodsNum = (skuId, skuNum)=>{
+    return request({
+        url:`/addToCart/${skuId}/${skuNum}`,
+        // method
+    })
+}
+ 
+//删除购物车商品
+export const reqDeleteCart=(skuId)=>{
+    return request({
+        url:`cart/deleteCart/${skuId}`,
+        method:'delete'
+    })
+} 

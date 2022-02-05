@@ -38,24 +38,38 @@
         <div class="details clearfix">
           <div class="sui-navbar">
             <div class="navbar-inner filter">
-              <ul class="sui-nav">
-                <li class="active">
-                  <a href="#">综合</a>
+              <ul class="sui-nav" @click="changeActive">
+                <li
+                  @click="changeOrder('1')"
+                  :class="currentActive == 'zonghe' ? 'active' : ''"
+                >
+                  <a data-Active="zonghe">
+                    综合<i
+                      v-if="currentActive == 'zonghe'"
+                      class="iconfont"
+                      :class="
+                        searchParams.order.indexOf('desc') == -1
+                          ? 'icon-paixushengxu'
+                          : 'icon-jiangxu'
+                      "
+                    ></i
+                  ></a>
                 </li>
-                <li>
-                  <a href="#">销量</a>
-                </li>
-                <li>
-                  <a href="#">新品</a>
-                </li>
-                <li>
-                  <a href="#">评价</a>
-                </li>
-                <li>
-                  <a href="#">价格⬆</a>
-                </li>
-                <li>
-                  <a href="#">价格⬇</a>
+                <li
+                  @click="changeOrder('2')"
+                  :class="currentActive == 'jiage' ? 'active' : ''"
+                >
+                  <a data-Active="jiage"
+                    >价格<i
+                      v-if="currentActive == 'jiage'"
+                      class="iconfont"
+                      :class="
+                        searchParams.order.indexOf('desc') == -1
+                          ? 'icon-paixushengxu'
+                          : 'icon-jiangxu'
+                      "
+                    ></i
+                  ></a>
                 </li>
               </ul>
             </div>
@@ -65,9 +79,13 @@
               <li class="yui3-u-1-5" v-for="goodItem in searchGetter" :key="goodItem.id">
                 <div class="list-wrap">
                   <div class="p-img">
-                    <a href="item.html" target="_blank"
+                    <router-link :to="`/detail/${goodItem.id}`">
+                      <img :src="goodItem.defaultImg" />
+                    </router-link>
+
+                    <!-- <a href="item.html" target="_blank"
                       ><img :src="goodItem.defaultImg"
-                    /></a>
+                    /></a> -->
                   </div>
                   <div class="price">
                     <strong>
@@ -96,35 +114,14 @@
               </li>
             </ul>
           </div>
-          <div class="fr page">
-            <div class="sui-pagination clearfix">
-              <ul>
-                <li class="prev disabled">
-                  <a href="#">«上一页</a>
-                </li>
-                <li class="active">
-                  <a href="#">1</a>
-                </li>
-                <li>
-                  <a href="#">2</a>
-                </li>
-                <li>
-                  <a href="#">3</a>
-                </li>
-                <li>
-                  <a href="#">4</a>
-                </li>
-                <li>
-                  <a href="#">5</a>
-                </li>
-                <li class="dotted"><span>...</span></li>
-                <li class="next">
-                  <a href="#">下一页»</a>
-                </li>
-              </ul>
-              <div><span>共10页&nbsp;</span></div>
-            </div>
-          </div>
+          <!-- 分页 -->
+          <Pagination
+            :pageNo="searchParams.pageNo"
+            :pageSize="searchParams.pageSize"
+            :total="total"
+            :continues="5"
+            @getPageNo="getPageNo"
+          />
         </div>
       </div>
     </div>
@@ -133,7 +130,7 @@
 
 <script>
   // import { mapState } from "vuex";
-  import { mapGetters } from "vuex";
+  import { mapGetters, mapState } from "vuex";
   import SearchSelector from "./SearchSelector/SearchSelector";
   export default {
     name: "Search",
@@ -152,7 +149,7 @@
           //搜索的关键字
           keyword: "",
           //排序:初始状态应该是综合且降序
-          order: "",
+          order: "1:desc",
           //第几页
           pageNo: 1,
           //每一页展示条数
@@ -162,6 +159,8 @@
           //品牌
           trademark: "",
         },
+        currentActive: "zonghe",
+        flag: true, //true jiangxu  moren jiangxu
       };
     },
     created() {
@@ -181,6 +180,11 @@
       // routeWatch(){
       //   return this.$route
       // }
+      ...mapState({
+        total(state) {
+          return state.search.searchList.total;
+        },
+      }),
     },
     watch: {
       //直接可以监听到$reoute 不用加this
@@ -239,7 +243,7 @@
         this.searchParams.keyword = undefined;
         this.getSearchData();
         if (this.$route.query) {
-          this.$route.push({
+          this.$router.push({
             name: "Search",
             query: this.$route.query,
           });
@@ -254,9 +258,9 @@
         // })
       },
       //清除searchParams的props
-      cleanProps(index){
-        this.searchParams.props.splice(index,1)
-        this.getSearchData()
+      cleanProps(index) {
+        this.searchParams.props.splice(index, 1);
+        this.getSearchData();
       },
 
       //获取子组件SearchSelect传过来的平台售卖属性值----自定义事件
@@ -267,9 +271,44 @@
         //   return this.searchParams.props.push(propsArr)
         // }
 
-       this.searchParams.props.push(propsArr)
-       //es6新的数据结构 set 成员值唯一
-        this.searchParams.props=[...new Set(this.searchParams.props)]
+        this.searchParams.props.push(propsArr);
+        //es6新的数据结构 set 成员值唯一
+        this.searchParams.props = [...new Set(this.searchParams.props)];
+        this.getSearchData();
+      },
+
+      changeActive(event) {
+        let currentActive = event.target.dataset.active;
+        this.currentActive = currentActive;
+        // let index= event.target.dataset.index
+        // let newOrder='1:decs'
+        console.log(event);
+        // if(index=='1'){
+        //   newOrder=`${newOrder=='1:desc'?'1:asc':'1:desc'}`
+        // }else{
+        //   newOrder=`${}`
+        // }
+        console.log(this.currentActive);
+      },
+      changeOrder(flag) {
+        console.log(flag);
+        let originFlag = this.searchParams.order.split(":")[0]; //orginFlag=1
+        let originSort = this.searchParams.order.split(":")[1];
+        let newOrder;
+        if (flag == originFlag) {
+          //flag=1||2 originFlag=1||2 点击的是自身=》降序变升序
+          newOrder = `${originFlag}:${originSort == "desc" ? "asc" : "desc"}`;
+        } else {
+          //flag=2||1  点击的是另一个
+          newOrder = `${flag}:${"desc"}`;
+        }
+        this.searchParams.order = newOrder;
+        this.getSearchData();
+      },
+      getPageNo(pageNo) {
+        //整理带给服务器参数
+        this.searchParams.pageNo = pageNo;
+        //再次发请求
         this.getSearchData();
       },
 

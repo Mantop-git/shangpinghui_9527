@@ -4,6 +4,8 @@ import axios from 'axios';
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 
+import Store from '@/store/detail'
+
 const request = axios.create({
     baseURL: 'http://39.98.123.211/api/',
     timeout: 5000
@@ -12,6 +14,11 @@ const request = axios.create({
 //请求拦截
 request.interceptors.request.use(config => {
     // Do something before request is sent
+    //请求时给请求头加个字段
+    // console.log(Store,'saaaaaaaaaaaaaaa');
+    if (Store.state.uid_token){
+        config.headers.userTempId = Store.state.uid_token
+    }
     NProgress.start()
     return config;
 }, error => {
