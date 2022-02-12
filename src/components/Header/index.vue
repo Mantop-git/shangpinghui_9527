@@ -6,10 +6,18 @@
         <div class="loginList">
           <p>尚品汇欢迎您！</p>
 
-          <p>
+          <p v-if="!$store.state.user.userInfo.name" :key="key">
             <span>请</span>
-            <a href="###">登录</a>
-            <a href="###" class="register">免费注册</a>
+            <!-- <a href="###">登录</a> -->
+            <router-link to="/login">登录</router-link>
+            <!-- <a href="###" class="register">免费注册</a> -->
+            <!-- <a href="###" class="register">免费注册</a> -->
+            <router-link to="/register" class="register">免费注册</router-link>
+            <!-- <router-link to="/login">登录</router-link> -->
+          </p>
+          <p v-else>
+            <a>{{ $store.state.user.userInfo.name }}</a>
+            <a class="register" @click="logout">退出登录</a>
           </p>
         </div>
         <div class="typeList">
@@ -54,20 +62,22 @@
 
 <script>
   import { mapState } from "vuex";
+  import { reqLogout } from "@/api";
   export default {
     name: "",
     data() {
       return {
         keyWords: "",
+        key:1
       };
     },
-    computed:{
-      ...mapState(['count'])
+    computed: {
+      ...mapState(["count"]),
     },
     created() {
-      this.$bus.$on('cleanHeaderKeywords',()=>{
-        this.keyWords=''
-      })
+      this.$bus.$on("cleanHeaderKeywords", () => {
+        this.keyWords = "";
+      });
     },
     methods: {
       searchClick() {
@@ -79,7 +89,7 @@
         this.$router.push({
           name: "Search",
           params: {
-            name:'Search',
+            name: "Search",
             keyword: this.keyWords,
           },
           // query: {
@@ -87,6 +97,22 @@
           // },
         });
       },
+      //退出登录
+      async logout() {
+        sessionStorage.removeItem("token");
+        let res = await reqLogout();
+        window.location.reload() //只能通过此方法重新渲染 ui
+        this.$store.dispatch("getUserInfo");
+        this.$nextTick(()=>{
+          this.reRender()
+        })
+        console.log(res, "logoutt");
+      },
+      reRender(){
+        this.$forceUpdate()
+         this.key+=1
+         
+      }
     },
   };
 </script>

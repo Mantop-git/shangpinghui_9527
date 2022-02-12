@@ -16,14 +16,14 @@ const actions = {
         if (res.data.code == 200) {
             commit('GETSEARCHLIST', res.data.data)
         }
-        console.log(res, 'getSearchList');
+        console.log(res, '获取search模块数据 ');
     }
 }
 //简化数据而生，类似计算属性
 const getters = {
     searchGetter(state) {
         // console.log(a,'当前state对象');
-        console.log(state, '当前仓库的state对象');
+        console.log(state, '当前getters仓库的state对象');
         return state.searchList.goodsList||[]
     },
     trademarkList(state){

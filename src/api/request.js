@@ -3,6 +3,7 @@ import axios from 'axios';
 // import NProgress  from '../../node_modules/nprogress' 下载的依赖都在node_modules 傻子才这样导入
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
+import router from '@/router'
 
 import Store from '@/store/detail'
 
@@ -14,12 +15,18 @@ const request = axios.create({
 //请求拦截
 request.interceptors.request.use(config => {
     // Do something before request is sent
-    //请求时给请求头加个字段
+    //请求时给请求头加个字段,像token uid 给请求头
     // console.log(Store,'saaaaaaaaaaaaaaa');
     if (Store.state.uid_token){
         config.headers.userTempId = Store.state.uid_token
     }
-    NProgress.start()
+    if(sessionStorage.getItem('token')){
+        config.headers.token=sessionStorage.getItem('token')
+    }
+    // console.log(router,'aaaaaaaaaaaaaaaaaaaaaa');
+    if (router.history.current.path!=='/pay'){
+        NProgress.start()
+    }
     return config;
 }, error => {
     // Do something with request error

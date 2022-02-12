@@ -80,7 +80,7 @@
                 <div class="list-wrap">
                   <div class="p-img">
                     <router-link :to="`/detail/${goodItem.id}`">
-                      <img :src="goodItem.defaultImg" />
+                      <img v-lazy="goodItem.defaultImg" />
                     </router-link>
 
                     <!-- <a href="item.html" target="_blank"

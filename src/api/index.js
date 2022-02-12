@@ -24,6 +24,12 @@ export const reqGetFloorList = () => {
         method: 'get'
     })
 }
+export const reqWeixinList = () => {
+    return mockRequest({
+        url: '/pay',
+        method: 'get'
+    })
+}
 
 //search模块 获取搜索模块数据
 export const reqGetSearchInfo=(params)=>{
@@ -72,3 +78,84 @@ export const reqDeleteCart=(skuId)=>{
         method:'delete'
     })
 } 
+//获取注册验证码
+export const reqGetCode = (telPhone)=>{
+    return request({
+        url:`/user/passport/sendCode/${telPhone}`,
+        method:'get'
+    })
+}
+
+//注册账号
+export const reqRegister=(data)=>{
+    return request({
+        url:'/user/passport/register',
+        data:data,
+        method:'post'
+    })
+}
+//登录账号
+export const reqLogin=(data)=>{
+    return request({
+        url:'user/passport/login',
+        data,
+        method:'post'
+    })
+}
+//获取用户信息
+export const reqUserInfo=(token)=>{
+    return request({
+        url:'user/passport/auth/getUserInfo',
+        method:'get'
+    })
+}
+//退出登录
+export const reqLogout=()=>{
+    return request({
+        url:'/user/passport/logout',
+        method:'get'
+    })
+}
+//获取用户地址
+export const reqAddressInfo = () => {
+    return request({
+        url: '/user/userAddress/auth/findUserAddressList',
+        method: 'get'
+    })
+}
+//商品清单
+export const reqOrderInfo = () => {
+    return request({
+        url: '/order/auth/trade',
+        method: 'get'
+    })
+}
+//提交订单的接口
+export const reqSubmitOrder=(tradeNo,data)=>{
+    return request({
+        url: `/order/auth/submitOrder?tradeNo=${tradeNo}`,
+        data,
+        method:'post'
+    })
+}
+//获取支付信息
+export const reqPayInfo = (orderId) => {
+    return request({
+        url: `/payment/weixin/createNative/${orderId}`,
+        method: 'get'
+    })
+}
+//获取支付状态
+export const reqPayStatus= (orderId) => {
+    return request({
+        url: `/payment/weixin/queryPayStatus/${orderId}`,
+        method: 'get'
+    })
+}
+//获取个人中心数据
+export const reqOrderList=(page,limit)=>{
+    return request({
+        url:`/order/auth/${page}/${limit}`,
+        method:'get'
+    })
+}

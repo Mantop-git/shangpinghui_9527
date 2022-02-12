@@ -49,6 +49,7 @@
     mounted() {
       this.$store.dispatch("getFloorList");
       // this.$store.dispatch("getCategoryList");
+      this.$store.dispatch('getUserInfo')
     },
   };
 </script>
